@@ -5,3 +5,4 @@
 /.vs
 /obj
 *.user
+/bin/Debug/net10.0
