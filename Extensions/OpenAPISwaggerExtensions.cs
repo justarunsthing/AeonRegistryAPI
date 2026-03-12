@@ -36,6 +36,16 @@ namespace AeonRegistryAPI.Extensions
                         Email = "justarunsthing@outlook.com"
                     }
                 });
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "Enter 'Bearer' [space] and your valid JWT token."
+                });
             });
 
             return services;
