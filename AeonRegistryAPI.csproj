@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Models\Request\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
