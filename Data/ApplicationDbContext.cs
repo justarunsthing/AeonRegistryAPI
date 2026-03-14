@@ -1,5 +1,4 @@
-﻿using AeonRegistryAPI.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace AeonRegistryAPI.Data
