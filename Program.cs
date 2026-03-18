@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using AeonRegistryAPI.Endpoints.Home;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using AeonRegistryAPI.Endpoints.CustomIdentityEndpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +47,7 @@ app.UseMiddleware<BlockIdentityEndpoints>();
 var authRouteGroup = app.MapGroup("/api/auth").WithTags("Admin");
 authRouteGroup.MapIdentityApi<ApplicationUser>();
 
+app.MapCustomIdentityEndpoints();
 app.MapHomeEndpoints();
 
 app.Run();
