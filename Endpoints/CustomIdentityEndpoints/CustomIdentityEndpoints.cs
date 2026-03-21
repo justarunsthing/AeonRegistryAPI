@@ -31,6 +31,13 @@ namespace AeonRegistryAPI.Endpoints.CustomIdentityEndpoints
                 .Produces(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status400BadRequest);
 
+            identityGroup.MapPost("/forgot-password", ForgotPassword)
+                .WithName("ForgotPassword")
+                .WithSummary("Custom forgot password")
+                .WithDescription("Custom forgot password flow for a user")
+                .Produces(StatusCodes.Status200OK)
+                .Produces(StatusCodes.Status400BadRequest);
+
             return route;
         }
 
@@ -113,6 +120,38 @@ namespace AeonRegistryAPI.Endpoints.CustomIdentityEndpoints
             {
                 return Results.BadRequest(new { Error = $"Error: {ex.Message}" });
             }
+        }
+
+        private static async Task<IResult> ForgotPassword(ForgotPasswordRequest request, UserManager<ApplicationUser> userManager, IEmailSender emailSender, IConfiguration config)
+        {
+            if (string.IsNullOrEmpty(request.Email))
+            {
+                return Results.BadRequest(new { Error = "Email address is required" });
+            }
+
+            var user = await userManager.FindByEmailAsync(request.Email);
+
+            if (user is null)
+            {
+                // Return Ok to not let user know that user doesn't exists
+                return Results.Ok(new { Message = "If the user exists, a forgot password link will be sent" });
+            }
+
+            var token = await userManager.GeneratePasswordResetTokenAsync(user);
+            var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+            var baseUrl = config["BaseUrl"] ?? "https://localhost:7103";
+            var resetPasswordLink = $"{baseUrl}/reset-password.html?email={user.Email}&resetCode={encodedToken}";
+
+            await emailSender.SendEmailAsync(
+                request.Email,
+                "Welcome to Aeon Registry",
+                $"""
+                    To reset your password, use this link:
+
+                    {resetPasswordLink}
+                """);
+
+            return Results.Ok(new { Message = "If the user exists, a forgot password link will be sent" });
         }
     }
 }
