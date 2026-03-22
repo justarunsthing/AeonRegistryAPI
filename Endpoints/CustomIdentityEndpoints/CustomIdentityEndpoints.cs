@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.AspNetCore.Identity.Data;
@@ -37,6 +38,14 @@ namespace AeonRegistryAPI.Endpoints.CustomIdentityEndpoints
                 .WithDescription("Custom forgot password flow for a user")
                 .Produces(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status400BadRequest);
+
+            identityGroup.MapGet("/manage/profile", GetProfile)
+                .WithName("ManageProfile")
+                .WithSummary("Get the current user's profile")
+                .WithDescription("Manage user's profile")
+                .Produces(StatusCodes.Status200OK)
+                .Produces(StatusCodes.Status404NotFound)
+                .RequireAuthorization();
 
             return route;
         }
@@ -152,6 +161,28 @@ namespace AeonRegistryAPI.Endpoints.CustomIdentityEndpoints
                 """);
 
             return Results.Ok(new { Message = "If the user exists, a forgot password link will be sent" });
+        }
+
+        // Typically need ClaimsPrincipal for authenticated endpoints to get the logged in user
+        private static async Task<IResult> GetProfile(ClaimsPrincipal principal, UserManager<ApplicationUser> userManager)
+        {
+            var user = await userManager.GetUserAsync(principal);
+
+            if (user is null)
+            {
+                return Results.NotFound();
+            }
+
+            var response = new UserProfileResponse
+            {
+                Id = user.Id,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                FullName = user.FullName,
+            };
+
+            return Results.Ok(response);
         }
     }
 }
