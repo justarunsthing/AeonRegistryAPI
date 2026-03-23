@@ -48,6 +48,15 @@ namespace AeonRegistryAPI.Endpoints.CustomIdentityEndpoints
                 .Produces(StatusCodes.Status401Unauthorized)
                 .RequireAuthorization();
 
+            identityGroup.MapPut("/manage/profile", UpdateProfile)
+                .WithName("UpdateProfile")
+                .WithSummary("Update the current user's profile")
+                .WithDescription("Update user's profile")
+                .Produces(StatusCodes.Status200OK)
+                .Produces(StatusCodes.Status404NotFound)
+                .Produces(StatusCodes.Status401Unauthorized)
+                .RequireAuthorization();
+
             return route;
         }
 
@@ -184,6 +193,33 @@ namespace AeonRegistryAPI.Endpoints.CustomIdentityEndpoints
             };
 
             return Results.Ok(response);
+        }
+
+        private static async Task<IResult> UpdateProfile(UpdateUserProfileRequest request,ClaimsPrincipal principal, UserManager<ApplicationUser> userManager)
+        {
+            if (string.IsNullOrEmpty(request.FirstName) || string.IsNullOrEmpty(request.LastName))
+            {
+                return Results.BadRequest(new { Error = "First and last names are required" });
+            }
+
+            var user = await userManager.GetUserAsync(principal);
+
+            if (user is null)
+            {
+                return Results.NotFound();
+            }
+
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+
+            var result = await userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                return Results.BadRequest(new { Error = $"Update failed: {result.Errors}" });
+            }
+
+            return Results.Ok(new { Message = "User profile updated successfully" });
         }
     }
 }
