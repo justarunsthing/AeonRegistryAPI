@@ -57,6 +57,14 @@ namespace AeonRegistryAPI.Endpoints.CustomIdentityEndpoints
                 .Produces(StatusCodes.Status401Unauthorized)
                 .RequireAuthorization();
 
+            identityGroup.MapGet("/manage/users", GetAllUsers)
+                .WithName("GetUsers")
+                .WithSummary("Gets all registered users")
+                .WithDescription("Gets all users")
+                .Produces<IEnumerable<UserProfileResponse>>(StatusCodes.Status200OK)
+                .Produces(StatusCodes.Status401Unauthorized)
+                .RequireAuthorization();
+
             return route;
         }
 
@@ -220,6 +228,22 @@ namespace AeonRegistryAPI.Endpoints.CustomIdentityEndpoints
             }
 
             return Results.Ok(new { Message = "User profile updated successfully" });
+        }
+
+        private static async Task<IResult> GetAllUsers(UserManager<ApplicationUser> userManager)
+        {
+            var users = userManager.Users
+                .Select(u => new UserProfileResponse
+                {
+                    Id = u.Id,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    FullName = u.FullName,
+                    Email = u.Email
+                })
+                .ToList();
+
+            return Results.Ok(users);
         }
     }
 }
