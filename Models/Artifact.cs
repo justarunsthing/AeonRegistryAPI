@@ -22,5 +22,6 @@
         [Required]
         public int SiteId { get; set; }
         public Site? Site { get; set; }
+        public List<ArtifactMediaFile> MediaFiles { get; set; } = [];
     }
 }
