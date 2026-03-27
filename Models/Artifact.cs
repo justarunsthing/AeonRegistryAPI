@@ -11,7 +11,7 @@
         public string? CatalogNumber { get; set; }
 
         [Required, MaxLength(2000)]
-        public string? InternalNarrative { get; set; }
+        public string? InternalNarrative { get; set; } // Aeon narrative
 
         [MaxLength(2000)]
         public string? PublicNarrative { get; set; }
@@ -23,5 +23,6 @@
         public int SiteId { get; set; }
         public Site? Site { get; set; }
         public List<ArtifactMediaFile> MediaFiles { get; set; } = [];
+        public List<CatalogRecord> CatalogRecords { get; set; } = [];
     }
 }
