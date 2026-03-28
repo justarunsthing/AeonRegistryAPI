@@ -23,5 +23,7 @@
 
         [MaxLength(2000)]
         public string? InternalNarrative { get; set; }
+
+        public List<Artifact> Artifacts { get; set; } = [];
     }
 }
