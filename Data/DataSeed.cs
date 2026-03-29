@@ -30,9 +30,7 @@ namespace AeonRegistryAPI.Data
             await SeedArtifactMediaFilesAsync(dbContextSvc);
             await SeedCatalogRecordsAsync(svcProvider);
             await ResetPostgresSequencesAsync(dbContextSvc);
-
         }
-
 
         #region seed data
 
@@ -85,6 +83,7 @@ namespace AeonRegistryAPI.Data
                 {
                     PropertyNameCaseInsensitive = true
                 };
+
                 options.Converters.Add(new JsonStringEnumConverter()); // <-- accept "Type": "EnergySource" etc.
 
 
@@ -96,7 +95,6 @@ namespace AeonRegistryAPI.Data
                     {
                         artifact.Discovered = DateTime.SpecifyKind(artifact.Discovered, DateTimeKind.Utc);
                     }
-
 
                     context.Artifacts.AddRange(artifacts);
                     await context.SaveChangesAsync();
@@ -120,14 +118,14 @@ namespace AeonRegistryAPI.Data
             // List of site-based JSON files
             var files = new[]
             {
-             "catalogRecords.atlantis.json",
-             "catalogRecords.sahara.json",
-             "catalogRecords.andes.json",
-             "catalogRecords.antarctica.json",
-             "catalogRecords.gobekli.json",
-             "catalogRecords.yonaguni.json",
-             "catalogRecords.kailash.json"
-         };
+                 "catalogRecords.atlantis.json",
+                 "catalogRecords.sahara.json",
+                 "catalogRecords.andes.json",
+                 "catalogRecords.antarctica.json",
+                 "catalogRecords.gobekli.json",
+                 "catalogRecords.yonaguni.json",
+                 "catalogRecords.kailash.json"
+            };
 
             foreach (var fileName in files)
             {
@@ -206,10 +204,10 @@ namespace AeonRegistryAPI.Data
             await dbContext.SaveChangesAsync();
             Console.WriteLine("Catalog records seeded successfully.");
         }
+
         // Seed demo media (images)
         public static async Task SeedArtifactMediaFilesAsync(ApplicationDbContext context)
         {
-
             if (await context.ArtifactMediaFiles.AnyAsync())
             {
                 Console.WriteLine("Artifact media already seeded. Skipping.");
@@ -217,6 +215,7 @@ namespace AeonRegistryAPI.Data
             }
 
             var imagesPath = GetSeedPath("Images");
+
             if (!Directory.Exists(imagesPath))
             {
                 Console.WriteLine("No image folder found: " + imagesPath);
@@ -277,27 +276,26 @@ namespace AeonRegistryAPI.Data
         {
             // Reset sequence for Sites table
             await context.Database.ExecuteSqlRawAsync(@"
-     SELECT setval(
-         pg_get_serial_sequence('""Sites""', 'Id'),
-         COALESCE(MAX(""Id""), 1)
-     ) FROM ""Sites"";");
+             SELECT setval(
+                 pg_get_serial_sequence('""Sites""', 'Id'),
+                 COALESCE(MAX(""Id""), 1)
+             ) FROM ""Sites"";");
 
             // Optionally repeat for other tables that use explicit IDs in seed data:
             await context.Database.ExecuteSqlRawAsync(@"
-     SELECT setval(
-         pg_get_serial_sequence('""Artifacts""', 'Id'),
-         COALESCE(MAX(""Id""), 1)
-     ) FROM ""Artifacts"";");
+             SELECT setval(
+                 pg_get_serial_sequence('""Artifacts""', 'Id'),
+                 COALESCE(MAX(""Id""), 1)
+             ) FROM ""Artifacts"";");
 
             await context.Database.ExecuteSqlRawAsync(@"
-     SELECT setval(
-         pg_get_serial_sequence('""CatalogRecords""', 'Id'),
-         COALESCE(MAX(""Id""), 1)
-     ) FROM ""CatalogRecords"";");
+             SELECT setval(
+                 pg_get_serial_sequence('""CatalogRecords""', 'Id'),
+                 COALESCE(MAX(""Id""), 1)
+             ) FROM ""CatalogRecords"";");
 
             Console.WriteLine("✅ PostgreSQL identity sequences reset successfully.");
         }
-
 
         // DTOs for import
         private class CatalogRecordImport
@@ -318,7 +316,6 @@ namespace AeonRegistryAPI.Data
         }
 
         #endregion seed data
-
 
         #region seed roles and users
 
@@ -343,6 +340,7 @@ namespace AeonRegistryAPI.Data
 
             // Admin
             var admin = await GetOrCreateUserAsync(userManager, "Admin", "User", "admin@aeon.org", "Admin123!", "Admin");
+
             if (admin != null)
             {
                 await AddClaimIfNotExists(userManager, admin, "CanVerifyCatalogRecords", "true");
@@ -352,6 +350,7 @@ namespace AeonRegistryAPI.Data
 
             // Archivist
             var archivist = await GetOrCreateUserAsync(userManager, "Archivist", "User", "archivist@aeon.org", "Archivist123!", "Archivist");
+
             if (archivist != null)
             {
                 await AddClaimIfNotExists(userManager, archivist, "CanVerifyCatalogRecords", "true");
@@ -359,6 +358,7 @@ namespace AeonRegistryAPI.Data
 
             // Researcher
             var researcher = await GetOrCreateUserAsync(userManager, "Researcher", "User", "researcher@aeon.org", "Researcher123!", "Researcher");
+
             if (researcher != null)
             {
                 await AddClaimIfNotExists(userManager, researcher, "CanUploadMedia", "true");
@@ -377,6 +377,7 @@ namespace AeonRegistryAPI.Data
              string role)
         {
             var user = await userManager.FindByEmailAsync(email);
+
             if (user == null)
             {
                 user = new ApplicationUser
@@ -399,7 +400,6 @@ namespace AeonRegistryAPI.Data
 
             return user;
         }
-
 
         private static async Task AddClaimIfNotExists(UserManager<ApplicationUser> userManager, ApplicationUser user, string claimType, string claimValue)
         {
