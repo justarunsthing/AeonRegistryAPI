@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using AeonRegistryAPI.Endpoints.Home;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using AeonRegistryAPI.Endpoints.CustomIdentityEndpoints;
+using AeonRegistryAPI.Endpoints.Site;
+using AeonRegistryAPI.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +27,9 @@ builder.Services.AddAuthorizationBuilder().AddPolicy("AdminOnly", policy => poli
 
 // Email service
 builder.Services.AddTransient<IEmailSender, ConsoleEmailService>();
+
+// Custom services
+builder.Services.AddScoped<ISiteService, SiteService>();
 
 // Enable validation for minimal APIs
 builder.Services.AddValidation();
@@ -54,5 +59,6 @@ authRouteGroup.MapIdentityApi<ApplicationUser>();
 
 app.MapCustomIdentityEndpoints();
 app.MapHomeEndpoints();
+app.MapSiteEndpoints();
 
 app.Run();
