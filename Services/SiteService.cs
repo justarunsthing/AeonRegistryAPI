@@ -5,7 +5,7 @@ namespace AeonRegistryAPI.Services
 {
     public class SiteService(ApplicationDbContext context) : ISiteService
     {
-        public async Task<IEnumerable<PublicSiteResponse>> GetAllSitesAsync(CancellationToken ct)
+        public async Task<List<PublicSiteResponse>> GetAllSitesAsync(CancellationToken ct)
         {
             return await context.Sites
                 .AsNoTracking()

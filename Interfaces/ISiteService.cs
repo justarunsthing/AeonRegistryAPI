@@ -2,6 +2,6 @@
 {
     public interface ISiteService
     {
-        Task<IEnumerable<PublicSiteResponse>> GetAllSitesAsync(CancellationToken ct);
+        Task<List<PublicSiteResponse>> GetAllSitesAsync(CancellationToken ct);
     }
 }
