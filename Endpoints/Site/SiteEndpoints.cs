@@ -1,4 +1,5 @@
-﻿using AeonRegistryAPI.Interfaces;
+﻿using AeonRegistryAPI.Filters;
+using AeonRegistryAPI.Interfaces;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace AeonRegistryAPI.Endpoints.Site
@@ -11,7 +12,8 @@ namespace AeonRegistryAPI.Endpoints.Site
                 .AllowAnonymous()
                 .WithSummary("Public Site Endpoints")
                 .WithDescription("Endpoints for retrieving public site information")
-                .WithTags("Sites - Public");
+                .WithTags("Sites - Public")
+                .AddEndpointFilter<ExceptionHandlingFilter>();
 
             publicGroup.MapGet("", GetAllSites)
                 .WithName(nameof(GetAllSites))
