@@ -15,6 +15,13 @@ namespace AeonRegistryAPI.Endpoints.Site
                 .WithTags("Sites - Public")
                 .AddEndpointFilter<ExceptionHandlingFilter>();
 
+            publicGroup.MapGet("/{id:int}", GetSiteById)
+                .WithName(nameof(GetSiteById))
+                .Produces<PublicSiteResponse>(StatusCodes.Status200OK)
+                .Produces(StatusCodes.Status404NotFound)
+                .WithSummary("Get site by ID")
+                .WithDescription("Retrieves a public site record by its id");
+
             publicGroup.MapGet("", GetAllSites)
                 .WithName(nameof(GetAllSites))
                 .Produces<List<PublicSiteResponse>>(StatusCodes.Status200OK)
@@ -23,6 +30,18 @@ namespace AeonRegistryAPI.Endpoints.Site
                 .WithDescription("Retrieves all public site records");
 
             return route;
+        }
+
+        private static async Task<Results<Ok<PublicSiteResponse>, NotFound>> GetSiteById(int id, ISiteService service, CancellationToken ct)
+        {
+            var site = await service.GetSiteByIdAsync(id, ct);
+
+            if (site is null)
+            {
+                return TypedResults.NotFound();
+            }
+
+            return TypedResults.Ok(site);
         }
 
         private static async Task<Ok<List<PublicSiteResponse>>> GetAllSites(ISiteService service, CancellationToken ct)
