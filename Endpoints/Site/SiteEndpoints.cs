@@ -19,6 +19,7 @@ namespace AeonRegistryAPI.Endpoints.Site
                 .WithName(nameof(GetSiteById))
                 .Produces<PublicSiteResponse>(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status404NotFound)
+                .Produces(StatusCodes.Status500InternalServerError)
                 .WithSummary("Get site by ID")
                 .WithDescription("Retrieves a public site record by its id");
 
