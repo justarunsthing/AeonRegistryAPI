@@ -39,5 +39,24 @@ namespace AeonRegistryAPI.Services
                 })
                 .ToListAsync(ct);
         }
+
+        public async Task<List<PrivateSiteResponse>> GetAllPrivateSitesAsync(CancellationToken ct)
+        {
+            return await context.Sites
+                .AsNoTracking()
+                .Select(s => new PrivateSiteResponse
+                {
+                    Id = s.Id,
+                    Name = s.Name!,
+                    Location = s.Location,
+                    Coordinates = s.Coordinates,
+                    Latitude = s.Latitude,
+                    Longitude = s.Longitude,
+                    Description = s.Description,
+                    PublicNarrative = s.PublicNarrative,
+                    InternalNarrative = s.InternalNarrative
+                })
+                .ToListAsync(ct);
+        }
     }
 }
