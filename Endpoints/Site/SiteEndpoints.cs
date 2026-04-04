@@ -15,6 +15,14 @@ namespace AeonRegistryAPI.Endpoints.Site
                 .WithTags("Sites - Public")
                 .AddEndpointFilter<ExceptionHandlingFilter>();
 
+            var privateGroup = route.MapGroup("/api/private/sites")
+                .RequireAuthorization()
+                .WithSummary("Private Site Endpoints")
+                .WithDescription("Endpoints for retrieving private site information, requires authentication")
+                .WithTags("Sites - Private")
+                .AddEndpointFilter<ExceptionHandlingFilter>();
+
+            // Public endpoints
             publicGroup.MapGet("/{id:int}", GetSiteById)
                 .WithName(nameof(GetSiteById))
                 .Produces<PublicSiteResponse>(StatusCodes.Status200OK)
@@ -29,6 +37,16 @@ namespace AeonRegistryAPI.Endpoints.Site
                 .Produces(StatusCodes.Status500InternalServerError)
                 .WithSummary("Get all sites")
                 .WithDescription("Retrieves all public site records");
+
+            // Private endpoints
+            privateGroup.MapGet("", GetAllPrivateSites)
+                .WithName(nameof(GetAllPrivateSites))
+                .Produces<List<PrivateSiteResponse>>(StatusCodes.Status200OK)
+                .Produces(StatusCodes.Status401Unauthorized)
+                .Produces(StatusCodes.Status403Forbidden)
+                .Produces(StatusCodes.Status500InternalServerError)
+                .WithSummary("Get all private sites")
+                .WithDescription("Retrieves all private site records, requires authentication");
 
             return route;
         }
@@ -48,6 +66,13 @@ namespace AeonRegistryAPI.Endpoints.Site
         private static async Task<Ok<List<PublicSiteResponse>>> GetAllSites(ISiteService service, CancellationToken ct)
         {
             var sites = await service.GetAllSitesAsync(ct);
+
+            return TypedResults.Ok(sites);
+        }
+
+        private static async Task<Ok<List<PrivateSiteResponse>>> GetAllPrivateSites(ISiteService service, CancellationToken ct)
+        {
+            var sites = await service.GetAllPrivateSitesAsync(ct);
 
             return TypedResults.Ok(sites);
         }
