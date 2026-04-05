@@ -39,6 +39,16 @@ namespace AeonRegistryAPI.Endpoints.Site
                 .WithDescription("Retrieves all public site records");
 
             // Private endpoints
+            privateGroup.MapGet("/{id:int}", GetPrivateSiteById)
+                .WithName(nameof(GetPrivateSiteById))
+                .Produces<PrivateSiteResponse>(StatusCodes.Status200OK)
+                .Produces(StatusCodes.Status401Unauthorized)
+                .Produces(StatusCodes.Status403Forbidden)
+                .Produces(StatusCodes.Status404NotFound)
+                .Produces(StatusCodes.Status500InternalServerError)
+                .WithSummary("Get private site by ID")
+                .WithDescription("Retrieves a private site record by its id, requires authentication");
+
             privateGroup.MapGet("", GetAllPrivateSites)
                 .WithName(nameof(GetAllPrivateSites))
                 .Produces<List<PrivateSiteResponse>>(StatusCodes.Status200OK)
@@ -68,6 +78,18 @@ namespace AeonRegistryAPI.Endpoints.Site
             var sites = await service.GetAllSitesAsync(ct);
 
             return TypedResults.Ok(sites);
+        }
+
+        private static async Task<Results<Ok<PrivateSiteResponse>, NotFound>> GetPrivateSiteById(int id, ISiteService service, CancellationToken ct)
+        {
+            var site = await service.GetPrivateSiteByIdAsync(id, ct);
+
+            if (site is null)
+            {
+                return TypedResults.NotFound();
+            }
+
+            return TypedResults.Ok(site);
         }
 
         private static async Task<Ok<List<PrivateSiteResponse>>> GetAllPrivateSites(ISiteService service, CancellationToken ct)
