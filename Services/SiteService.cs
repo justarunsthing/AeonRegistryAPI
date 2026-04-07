@@ -1,4 +1,5 @@
 ﻿using AeonRegistryAPI.Interfaces;
+using AeonRegistryAPI.Models.Request;
 using Microsoft.EntityFrameworkCore;
 
 namespace AeonRegistryAPI.Services
@@ -77,6 +78,37 @@ namespace AeonRegistryAPI.Services
                     InternalNarrative = s.InternalNarrative
                 })
                 .ToListAsync(ct);
+        }
+
+        public async Task<PrivateSiteResponse> CreateSiteAsync(CreateSiteRequest request, CancellationToken ct)
+        {
+            var site = new Site
+            {
+                Name = request.Name,
+                Location = request.Location,
+                Description = request.Description,
+                Coordinates = request.Coordinates,
+                Latitude = request.Latitude,
+                Longitude = request.Longitude,
+                PublicNarrative = request.PublicNarrative,
+                InternalNarrative = request.InternalNarrative
+            };
+
+            context.Sites.Add(site);
+            await context.SaveChangesAsync(ct);
+
+            return new PrivateSiteResponse
+            {
+                Id = site.Id,
+                Name = site.Name!,
+                Location = site.Location,
+                Coordinates = site.Coordinates,
+                Latitude = site.Latitude,
+                Longitude = site.Longitude,
+                Description = site.Description,
+                PublicNarrative = site.PublicNarrative,
+                InternalNarrative = site.InternalNarrative
+            };
         }
     }
 }
