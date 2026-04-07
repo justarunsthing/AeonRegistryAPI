@@ -58,6 +58,15 @@ namespace AeonRegistryAPI.Endpoints.Site
                 .WithSummary("Get all private sites")
                 .WithDescription("Retrieves all private site records, requires authentication");
 
+            privateGroup.MapPost("", CreateSite)
+                .WithName(nameof(CreateSite))
+                .Accepts<CreateSiteRequest>("application/json")
+                .Produces<PrivateSiteResponse>(StatusCodes.Status201Created)
+                .ProducesValidationProblem()
+                .Produces(StatusCodes.Status500InternalServerError)
+                .WithSummary("Create a new site")
+                .WithDescription("Creates a new site record and returns it, requires authentication");
+
             return route;
         }
 
@@ -97,6 +106,21 @@ namespace AeonRegistryAPI.Endpoints.Site
             var sites = await service.GetAllPrivateSitesAsync(ct);
 
             return TypedResults.Ok(sites);
+        }
+
+        private static async Task<Results<Created<PrivateSiteResponse>, ValidationProblem>> CreateSite(CreateSiteRequest request, ISiteService service, CancellationToken ct)
+        {
+            if (request is null)
+            {
+                return TypedResults.ValidationProblem(new Dictionary<string, string[]>
+                {
+                    { "Error", new[] { "Please fill in the required fields." } },
+                });
+            }
+
+            var createdSite = await service.CreateSiteAsync(request, ct);
+
+            return TypedResults.Created($"/api/private/sites/{createdSite.Id}", createdSite);
         }
     }
 }
