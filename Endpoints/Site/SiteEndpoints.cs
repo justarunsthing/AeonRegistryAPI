@@ -67,6 +67,17 @@ namespace AeonRegistryAPI.Endpoints.Site
                 .WithSummary("Create a new site")
                 .WithDescription("Creates a new site record and returns it, requires authentication");
 
+            privateGroup.MapPut("/{id:int}", UpdateSite)
+                .WithName(nameof(UpdateSite))
+                .Accepts<UpdateSiteRequest>("application/json")
+                .Produces(StatusCodes.Status204NoContent)
+                .Produces(StatusCodes.Status404NotFound)
+                .Produces(StatusCodes.Status401Unauthorized)
+                .Produces(StatusCodes.Status500InternalServerError)
+                .ProducesValidationProblem()
+                .WithSummary("Update an existing site")
+                .WithDescription("Updates an existing site record by its id, requires authentication");
+
             return route;
         }
 
@@ -121,6 +132,13 @@ namespace AeonRegistryAPI.Endpoints.Site
             var createdSite = await service.CreateSiteAsync(request, ct);
 
             return TypedResults.Created($"/api/private/sites/{createdSite.Id}", createdSite);
+        }
+
+        private static async Task<Results<NoContent, NotFound, ValidationProblem>> UpdateSite(int id, UpdateSiteRequest request, ISiteService service, CancellationToken ct)
+        {
+            var success = await service.UpdateSiteAsync(id, request, ct);
+
+            return success ? TypedResults.NoContent() : TypedResults.NotFound();
         }
     }
 }
