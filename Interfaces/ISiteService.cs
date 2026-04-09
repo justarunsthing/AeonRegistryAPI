@@ -7,5 +7,6 @@
         Task<PrivateSiteResponse?> GetPrivateSiteByIdAsync(int id, CancellationToken ct);
         Task<List<PrivateSiteResponse>> GetAllPrivateSitesAsync(CancellationToken ct);
         Task<PrivateSiteResponse> CreateSiteAsync(CreateSiteRequest request, CancellationToken ct);
+        Task<bool> UpdateSiteAsync(int id, UpdateSiteRequest request, CancellationToken ct);
     }
 }

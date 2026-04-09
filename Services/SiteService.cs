@@ -110,5 +110,28 @@ namespace AeonRegistryAPI.Services
                 InternalNarrative = site.InternalNarrative
             };
         }
+
+        public async Task<bool> UpdateSiteAsync(int id, UpdateSiteRequest request, CancellationToken ct)
+        {
+            var site = await context.Sites.FindAsync([id], ct);
+
+            if (site == null)
+            {
+                return false;
+            }
+
+            site.Name = request.Name;
+            site.Location = request.Location;
+            site.Description = request.Description;
+            site.Coordinates = request.Coordinates;
+            site.Latitude = request.Latitude;
+            site.Longitude = request.Longitude;
+            site.PublicNarrative = request.PublicNarrative;
+            site.InternalNarrative = request.InternalNarrative;
+
+            await context.SaveChangesAsync(ct);
+
+            return true;
+        }
     }
 }
