@@ -133,5 +133,20 @@ namespace AeonRegistryAPI.Services
 
             return true;
         }
+
+        public async Task<bool> DeleteSiteAsync(int id, CancellationToken ct)
+        {
+            var site = await context.Sites.FindAsync([id], ct);
+
+            if (site == null)
+            {
+                return false;
+            }
+
+            context.Sites.Remove(site);
+            await context.SaveChangesAsync(ct);
+
+            return true;
+        }
     }
 }
