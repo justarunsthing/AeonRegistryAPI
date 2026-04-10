@@ -78,6 +78,15 @@ namespace AeonRegistryAPI.Endpoints.Site
                 .WithSummary("Update an existing site")
                 .WithDescription("Updates an existing site record by its id, requires authentication");
 
+            privateGroup.MapDelete("/{id:int}", DeleteSite)
+                .WithName(nameof(DeleteSite))
+                .Produces(StatusCodes.Status204NoContent)
+                .Produces(StatusCodes.Status401Unauthorized)
+                .Produces(StatusCodes.Status404NotFound)
+                .Produces(StatusCodes.Status500InternalServerError)
+                .WithSummary("Delete a site")
+                .WithDescription("Deletes a site record by its id, requires authentication");
+
             return route;
         }
 
@@ -139,6 +148,13 @@ namespace AeonRegistryAPI.Endpoints.Site
             var success = await service.UpdateSiteAsync(id, request, ct);
 
             return success ? TypedResults.NoContent() : TypedResults.NotFound();
+        }
+
+        private static async Task<Results<NoContent, NotFound>> DeleteSite(int id, ISiteService service, CancellationToken ct)
+        {
+            var deleted = await service.DeleteSiteAsync(id, ct);
+
+            return deleted ? TypedResults.NoContent() : TypedResults.NotFound();
         }
     }
 }
