@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using AeonRegistryAPI.Endpoints.CustomIdentityEndpoints;
 using AeonRegistryAPI.Endpoints.Site;
 using AeonRegistryAPI.Interfaces;
+using AeonRegistryAPI.Endpoints.Artifact;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,5 +61,6 @@ authRouteGroup.MapIdentityApi<ApplicationUser>();
 app.MapCustomIdentityEndpoints();
 app.MapHomeEndpoints();
 app.MapSiteEndpoints();
+app.MapArtifactMediaFileEndpoints();
 
 app.Run();
