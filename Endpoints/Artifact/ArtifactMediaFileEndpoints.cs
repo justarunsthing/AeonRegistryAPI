@@ -1,6 +1,7 @@
 ﻿using AeonRegistryAPI.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http.HttpResults;
+using AeonRegistryAPI.Interfaces;
 
 namespace AeonRegistryAPI.Endpoints.Artifact
 {
@@ -43,6 +44,25 @@ namespace AeonRegistryAPI.Endpoints.Artifact
             response.Headers.CacheControl = "public, max-age=86400"; // Cache for 1 day
 
             return TypedResults.File(image.Data, image.ContentType);
+        }
+
+        private static async Task<Results<Created, NotFound, BadRequest>> CreateArtifactMediaFile(int artifactId, IFormFile file, bool isPrimary, IArtifactMediaFileService service, CancellationToken ct)
+        {
+            if (file is null || file.Length == 0)
+            {
+                return TypedResults.BadRequest();
+            }
+
+            var media = await service.CreateArtifactMediaFileAsync(artifactId, file, isPrimary, ct);
+
+            if (media is null)
+            {
+                return TypedResults.NotFound();
+            }
+
+            var location = $"/api/public/artifacts/images/{media.Id}";
+
+            return TypedResults.Created(location);
         }
     }
 }
