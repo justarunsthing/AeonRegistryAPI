@@ -31,6 +31,7 @@ builder.Services.AddTransient<IEmailSender, ConsoleEmailService>();
 
 // Custom services
 builder.Services.AddScoped<ISiteService, SiteService>();
+builder.Services.AddScoped<IArtifactMediaFileService, ArtifactMediaFileService>();
 
 // Enable validation for minimal APIs
 builder.Services.AddValidation();
