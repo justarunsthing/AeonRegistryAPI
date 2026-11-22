@@ -32,6 +32,7 @@ builder.Services.AddTransient<IEmailSender, ConsoleEmailService>();
 // Custom services
 builder.Services.AddScoped<ISiteService, SiteService>();
 builder.Services.AddScoped<IArtifactMediaFileService, ArtifactMediaFileService>();
+builder.Services.AddScoped<IArtifactService, ArtifactService>();
 
 // Enable validation for minimal APIs
 builder.Services.AddValidation();
@@ -63,5 +64,6 @@ app.MapCustomIdentityEndpoints();
 app.MapHomeEndpoints();
 app.MapSiteEndpoints();
 app.MapArtifactMediaFileEndpoints();
+app.MapArtifactEndpoints();
 
 app.Run();
