@@ -38,6 +38,14 @@ namespace AeonRegistryAPI.Endpoints.Site
                 .WithSummary("Get all sites")
                 .WithDescription("Retrieves all public site records");
 
+            publicGroup.MapGet("/{siteId:int}/artifacts", GetPublicArtifactsBySite)
+                .WithName(nameof(GetPublicArtifactsBySite))
+                .Produces<List<PublicArtifactResponse>>(StatusCodes.Status200OK)
+                .Produces(StatusCodes.Status404NotFound)
+                .Produces(StatusCodes.Status500InternalServerError)
+                .WithSummary("Get public artifacts by site")
+                .WithDescription("Retrieves all public artifacts associated with a specific site by its id");
+
             // Private endpoints
             privateGroup.MapGet("/{id:int}", GetPrivateSiteById)
                 .WithName(nameof(GetPrivateSiteById))
@@ -155,6 +163,18 @@ namespace AeonRegistryAPI.Endpoints.Site
             var deleted = await service.DeleteSiteAsync(id, ct);
 
             return deleted ? TypedResults.NoContent() : TypedResults.NotFound();
+        }
+
+        private static async Task<Results<Ok<List<PublicArtifactResponse>>, NotFound>> GetPublicArtifactsBySite(int siteId, IArtifactService service, CancellationToken ct)
+        {
+            var artifacts = await service.GetPublicArtifactsBySiteAsync(siteId, ct);
+
+            if (artifacts is null || artifacts.Count == 0)
+            {
+                return TypedResults.NotFound();
+            }
+
+            return TypedResults.Ok(artifacts);
         }
     }
 }
