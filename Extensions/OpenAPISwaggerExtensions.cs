@@ -1,4 +1,5 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using AeonRegistryAPI.Filters;
+using Microsoft.OpenApi.Models;
 
 namespace AeonRegistryAPI.Extensions
 {
@@ -36,6 +37,9 @@ namespace AeonRegistryAPI.Extensions
                         Email = "justarunsthing@outlook.com"
                     }
                 });
+
+                c.UseInlineDefinitionsForEnums();
+                c.SchemaFilter<EnumStringFilter>();
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
