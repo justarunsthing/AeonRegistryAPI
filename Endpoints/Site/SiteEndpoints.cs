@@ -95,6 +95,16 @@ namespace AeonRegistryAPI.Endpoints.Site
                 .WithSummary("Delete a site")
                 .WithDescription("Deletes a site record by its id, requires authentication");
 
+            privateGroup.MapGet("/{siteId:int}/artifacts", GetPrivateArtifactsBySite)
+                .WithName(nameof(GetPrivateArtifactsBySite))
+                .Produces<List<PrivateArtifactResponse>>(StatusCodes.Status200OK)
+                .Produces(StatusCodes.Status404NotFound)
+                .Produces(StatusCodes.Status401Unauthorized)
+                .Produces(StatusCodes.Status403Forbidden)
+                .Produces(StatusCodes.Status500InternalServerError)
+                .WithSummary("Get private artifacts by site")
+                .WithDescription("Retrieves all private artifacts associated with a specific site by its id, requires authentication");
+
             return route;
         }
 
@@ -168,6 +178,18 @@ namespace AeonRegistryAPI.Endpoints.Site
         private static async Task<Results<Ok<List<PublicArtifactResponse>>, NotFound>> GetPublicArtifactsBySite(int siteId, IArtifactService service, CancellationToken ct)
         {
             var artifacts = await service.GetPublicArtifactsBySiteAsync(siteId, ct);
+
+            if (artifacts is null || artifacts.Count == 0)
+            {
+                return TypedResults.NotFound();
+            }
+
+            return TypedResults.Ok(artifacts);
+        }
+
+        private static async Task<Results<Ok<List<PrivateArtifactResponse>>, NotFound>> GetPrivateArtifactsBySite(int siteId, IArtifactService service, CancellationToken ct)
+        {
+            var artifacts = await service.GetPrivateArtifactsBySiteAsync(siteId, ct);
 
             if (artifacts is null || artifacts.Count == 0)
             {
