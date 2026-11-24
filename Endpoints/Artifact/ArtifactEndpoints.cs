@@ -37,6 +37,17 @@ namespace AeonRegistryAPI.Endpoints.Artifact
                 .Produces(StatusCodes.Status401Unauthorized)
                 .Produces(StatusCodes.Status500InternalServerError);
 
+            privateGroup.MapPost("", CreateArtifact)
+                .WithName(nameof(CreateArtifact))
+                .WithSummary("Create a new artifact record")
+                .WithDescription("Creates a new artifact with private data and returns the created artifact.")
+                .Accepts<CreateArtifactRequest>("application/json")
+                .ProducesValidationProblem()
+                .Produces<PrivateArtifactResponse>(StatusCodes.Status201Created)
+                .Produces(StatusCodes.Status404NotFound)
+                .Produces(StatusCodes.Status401Unauthorized)
+                .Produces(StatusCodes.Status500InternalServerError);
+
             return route;
         }
 
@@ -62,6 +73,18 @@ namespace AeonRegistryAPI.Endpoints.Artifact
             }
 
             return TypedResults.Ok(artifacts);
+        }
+
+        private static async Task<Results<Created<PrivateArtifactResponse>, NotFound>> CreateArtifact(IArtifactService service, CreateArtifactRequest request, CancellationToken ct)
+        {
+            var created = await service.CreateArtifactAsync(request, ct);
+
+            if (created == null)
+            {
+                return TypedResults.NotFound();
+            }
+
+            return TypedResults.Created($"/api/private/artifacts/{created.Id}", created);
         }
     }
 }
