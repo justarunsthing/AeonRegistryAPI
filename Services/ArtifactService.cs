@@ -62,6 +62,30 @@ namespace AeonRegistryAPI.Services
                 }).ToListAsync(ct);
         }
 
+        public async Task<PublicArtifactResponse?> GetPublicArtifactByIdAsync(int artifactId, CancellationToken ct)
+        {
+            var artifact = await db.Artifacts
+                .AsNoTracking()
+                .Where(a => a.Id == artifactId)
+                .Select(a => new PublicArtifactResponse
+                {
+                    Id = a.Id,
+                    Name = a.Name,
+                    CatalogNumber = a.CatalogNumber,
+                    PublicNarrative = a.PublicNarrative,
+                    Discovered = a.Discovered,
+                    Type = a.Type,
+                    SiteName = a.Site!.Name,
+                    PrimaryImageUrl = a.MediaFiles
+                        .Where(m => m.IsPrimary)
+                        .Select(m => $"/api/public/artifacts/images/{m.Id}")
+                        .FirstOrDefault()
+                })
+                .FirstOrDefaultAsync(ct);
+
+            return artifact;
+        }
+
         public async Task<List<PrivateArtifactResponse>> GetPrivateArtifactsAsync(CancellationToken ct)
         {
             return await db.Artifacts

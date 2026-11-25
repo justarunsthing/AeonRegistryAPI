@@ -5,6 +5,7 @@
         // Public
         Task<List<PublicArtifactResponse>> GetPublicArtifactsAsync(CancellationToken ct);
         Task<List<PublicArtifactResponse>> GetPublicArtifactsBySiteAsync(int siteId, CancellationToken ct);
+        Task<PublicArtifactResponse?> GetPublicArtifactByIdAsync(int artifactId, CancellationToken ct);
 
         // Private
         Task<List<PrivateArtifactResponse>> GetPrivateArtifactsAsync(CancellationToken ct);
