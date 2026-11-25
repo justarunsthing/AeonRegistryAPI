@@ -10,6 +10,7 @@
         // Private
         Task<List<PrivateArtifactResponse>> GetPrivateArtifactsAsync(CancellationToken ct);
         Task<List<PrivateArtifactResponse>> GetPrivateArtifactsBySiteAsync(int siteId, CancellationToken ct);
+        Task<PrivateArtifactResponse?> GetPrivateArtifactByIdAsync(int artifactId, CancellationToken ct);
         Task <PrivateArtifactResponse?> CreateArtifactAsync(CreateArtifactRequest request, CancellationToken ct);
     }
 }
