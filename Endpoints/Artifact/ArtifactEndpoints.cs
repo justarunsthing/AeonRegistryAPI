@@ -76,6 +76,15 @@ namespace AeonRegistryAPI.Endpoints.Artifact
                 .Produces(StatusCodes.Status401Unauthorized)
                 .Produces(StatusCodes.Status500InternalServerError);
 
+            privateGroup.MapDelete("/{id:int}", DeleteArtifact)
+                .WithName(nameof(DeleteArtifact))
+                .WithSummary("Delete an existing artifact record")
+                .WithDescription("Deletes an artifact and its images")
+                .Produces(StatusCodes.Status204NoContent)
+                .Produces(StatusCodes.Status404NotFound)
+                .Produces(StatusCodes.Status401Unauthorized)
+                .Produces(StatusCodes.Status500InternalServerError);
+
             return route;
         }
 
@@ -151,5 +160,16 @@ namespace AeonRegistryAPI.Endpoints.Artifact
             return TypedResults.NoContent();
         }
 
+        private static async Task<Results<NoContent, NotFound>> DeleteArtifact(int id, IArtifactService service, CancellationToken ct)
+        {
+            var deleted = await service.DeleteArtifactAsync(id, ct);
+
+            if (!deleted)
+            {
+                return TypedResults.NotFound();
+            }
+
+            return TypedResults.NoContent();
+        }
     }
 }
