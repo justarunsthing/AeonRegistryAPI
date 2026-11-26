@@ -212,5 +212,43 @@ namespace AeonRegistryAPI.Services
                 PrimaryImageUrl = null
             };
         }
+
+        public async Task<bool> UpdateArtifactAsync(int artifactId, UpdateArtifactRequest request, CancellationToken ct)
+        {
+            var siteExists = await db.Sites
+                .AsNoTracking()
+                .AnyAsync(s => s.Id == request.SiteId);
+
+            if (!siteExists)
+            {
+                return false;
+            }
+
+            var artifact = await db.Artifacts
+                .FindAsync(artifactId, ct);
+
+            if (artifact == null)
+            {
+                return false;
+            }
+
+            if (!Enum.TryParse<ArtifactType>(request.Type, true, out var artifactType))
+            {
+                throw new ArgumentException($"Invalid artifact type: {request.Type}");
+            }
+
+            artifact.Name = request.Name;
+            artifact.CatalogNumber = request.CatalogNumber;
+            artifact.InternalNarrative = request.InternalNarrative;
+            artifact.PublicNarrative = request.PublicNarrative;
+            artifact.Type = request.Type.ToString();
+            artifact.SiteId = request.SiteId;
+            artifact.Discovered = request.Discovered;
+
+            db.Artifacts.Update(artifact);
+            await db.SaveChangesAsync(ct);
+
+            return true;
+        }
     }
 }
