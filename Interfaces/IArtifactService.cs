@@ -13,5 +13,6 @@
         Task<PrivateArtifactResponse?> GetPrivateArtifactByIdAsync(int artifactId, CancellationToken ct);
         Task <PrivateArtifactResponse?> CreateArtifactAsync(CreateArtifactRequest request, CancellationToken ct);
         Task<bool> UpdateArtifactAsync(int artifactId, UpdateArtifactRequest request, CancellationToken ct);
+        Task<bool> DeleteArtifactAsync(int artifactId, CancellationToken ct);
     }
 }

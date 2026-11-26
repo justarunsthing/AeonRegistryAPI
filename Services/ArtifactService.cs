@@ -250,5 +250,27 @@ namespace AeonRegistryAPI.Services
 
             return true;
         }
+
+        public async Task<bool> DeleteArtifactAsync(int artifactId, CancellationToken ct)
+        {
+            var artifact = await db.Artifacts
+                .Include(a => a.MediaFiles)
+                .FirstOrDefaultAsync(a => a.Id == artifactId, ct);
+
+            if (artifact == null)
+            {
+                return false;
+            }
+
+            if (artifact.MediaFiles != null && artifact.MediaFiles.Count > 0)
+            {
+                db.ArtifactMediaFiles.RemoveRange(artifact.MediaFiles);
+            }
+
+            db.Artifacts.Remove(artifact);
+            await db.SaveChangesAsync(ct);
+
+            return true;
+        }
     }
 }
