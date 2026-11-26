@@ -65,6 +65,17 @@ namespace AeonRegistryAPI.Endpoints.Artifact
                 .Produces(StatusCodes.Status401Unauthorized)
                 .Produces(StatusCodes.Status500InternalServerError);
 
+            privateGroup.MapPut("/{id:int}", UpdateArtifact)
+                .WithName(nameof(UpdateArtifact))
+                .WithSummary("Update an existing artifact record")
+                .WithDescription("Updates an existing artifact with private data.")
+                .Accepts<UpdateArtifactRequest>("application/json")
+                .ProducesValidationProblem()
+                .Produces(StatusCodes.Status204NoContent)
+                .Produces(StatusCodes.Status404NotFound)
+                .Produces(StatusCodes.Status401Unauthorized)
+                .Produces(StatusCodes.Status500InternalServerError);
+
             return route;
         }
 
@@ -127,5 +138,18 @@ namespace AeonRegistryAPI.Endpoints.Artifact
 
             return TypedResults.Created($"/api/private/artifacts/{created.Id}", created);
         }
+
+        private static async Task<Results<NoContent, NotFound, ValidationProblem>> UpdateArtifact(int id, IArtifactService service, UpdateArtifactRequest request, CancellationToken ct)
+        {
+            var updated = await service.UpdateArtifactAsync(id, request, ct);
+
+            if (!updated)
+            {
+                return TypedResults.NotFound();
+            }
+
+            return TypedResults.NoContent();
+        }
+
     }
 }
