@@ -4,7 +4,7 @@
     {
         public static string GetConnectionstring(IConfiguration config)
         {
-            var connectionString = config.GetConnectionString("DbConnection");
+            var connectionString = config.GetConnectionString("DefaultConnection");
 
             return connectionString!;
         }

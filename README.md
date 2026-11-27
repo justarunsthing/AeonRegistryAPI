@@ -42,7 +42,7 @@ You need the .NET 10 SDK and PostgreSQL.
 From the repository root:
 
 ```bash
-dotnet user-secrets set "ConnectionStrings:DbConnection" "Host=localhost;Port=5432;Database=AeonRegistry;Username=postgres;Password=YOUR_PASSWORD"
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Port=5432;Database=AeonRegistry;Username=postgres;Password=YOUR_PASSWORD"
 dotnet run --launch-profile https
 ```
 
