@@ -8,7 +8,7 @@ namespace AeonRegistryAPI.Endpoints.Site
     {
         public static IEndpointRouteBuilder MapSiteEndpoints(this IEndpointRouteBuilder route)
         {
-            var publicGroup = route.MapGroup("/api/sites")
+            var publicGroup = route.MapGroup("/api/public/sites")
                 .AllowAnonymous()
                 .WithSummary("Public Site Endpoints")
                 .WithDescription("Endpoints for retrieving public site information")
