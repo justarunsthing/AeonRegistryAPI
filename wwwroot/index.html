@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Aeon Registry – Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/images/arunpun-favicon.png">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Adobe Typekit (Source Code Pro) -->
+    <link rel="stylesheet" href="https://use.typekit.net/tjk2iyn.css">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <!-- Use your existing map styling (dark mode + cyan branding) -->
+    <link rel="stylesheet" href="/site/sites-map.css?v=3">
+
+    <style>
+        .hero {
+            text-align: center;
+            padding: 70px 20px 24px;
+        }
+
+        .hero-logo {
+            height: 110px;
+            filter: drop-shadow(0 0 10px #00e0ff);
+            margin-bottom: 20px;
+        }
+
+        .hero-title {
+            font-size: 2.2rem;
+            color: #00e0ff;
+            text-transform: uppercase;
+            font-family: "source-code-pro", monospace;
+        }
+
+        .home-card {
+            background-color: #121212;
+            border: 1px solid #00e0ff;
+            border-radius: 10px;
+            padding: 20px;
+            height: 100%;
+            color: #e0e0e0;
+            font-family: "source-code-pro", monospace;
+            transition: 0.25s ease;
+        }
+
+            .home-card:hover {
+                background-color: #1a1a1a;
+                border-color: #00b8cc;
+                box-shadow: 0 0 14px rgba(0, 224, 255, 0.4);
+            }
+
+            .home-card h4 {
+                color: #00e0ff;
+                margin-bottom: 15px;
+                font-size: 1.2rem;
+            }
+
+            .home-card a {
+                color: #00e0ff;
+                font-weight: bold;
+                text-decoration: none;
+            }
+
+                .home-card a:hover {
+                    color: #00b8cc;
+                    text-decoration: underline;
+                }
+    </style>
+</head>
+
+<body class="dark-mode page-home">
+
+    <!-- Top Nav (Matches Aeon Map Style) -->
+    <nav class="navbar navbar-dark top-nav px-3 d-flex align-items-center">
+        <a href="/" class="navbar-brand d-flex align-items-center m-0">
+            <img src="/images/AeonRegistryLogoBLK.png" alt="Logo" class="nav-logo">
+            <span class="ms-3 text-info" style="font-family: 'source-code-pro', monospace;">
+                Aeon Research Division
+            </span>
+        </a>
+    </nav>
+
+    <main class="page-main">
+    <!-- Hero -->
+    <section class="hero">
+        <img src="/images/AeonRegistryLogoBLK.png" class="hero-logo" alt="Aeon Registry">
+        <h1 class="hero-title">Aeon Registry Portal</h1>
+    </section>
+
+    <!-- Two Cards -->
+    <div class="container mb-4">
+        <div class="row g-4 justify-content-center">
+
+            <!-- Covert Sites Map -->
+            <div class="col-md-4">
+                <div class="home-card">
+                    <h4><i class="bi bi-map"></i> Covert Sites Map</h4>
+                    <p>Explore global sites and view associated artifacts in the interactive map interface.</p>
+                    <a href="/site/sites-map.html">Launch Map</a>
+                </div>
+            </div>
+
+            <!-- API Documentation -->
+            <div class="col-md-4">
+                <div class="home-card">
+                    <h4><i class="bi bi-code-slash"></i> API Documentation</h4>
+                    <p>View full API specifications and test endpoints through the Swagger interface.</p>
+                    <a href="/swagger" target="_blank">Open API Docs</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-bar">
+            <div class="footer-meta">
+                <div class="built-by">
+                    <span>Built By</span>
+                    <img src="/images/arunpun-home-logo.png" alt="AP" width="30" height="30">
+                </div>
+                <div class="footer-copy">&copy; 2026 Arun Pun. All rights reserved.</div>
+            </div>
+            <img class="footer-wordmark" src="/images/arunpun-logo.png" alt="Arun Pun" width="216" height="36">
+            <div class="footer-social">
+                <a href="https://github.com/justarunsthing" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                    <i class="bi bi-github" aria-hidden="true"></i>
+                </a>
+                <a href="https://instagram.com/justarunsthing" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                    <i class="bi bi-instagram" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
