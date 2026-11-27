@@ -29,6 +29,8 @@ namespace AeonRegistryAPI.Extensions
                     - Secure media storage
                     - User role management
 
+                    [Launch Public Test Site](/site/sites-map.html)
+
                     """,
                     Contact = new OpenApiContact
                     {
