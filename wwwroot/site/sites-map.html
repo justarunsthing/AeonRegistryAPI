@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Covert Dig Sites Map</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/images/arunpun-favicon.png">
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
@@ -19,9 +20,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="sites-map.css">
+    <link rel="stylesheet" href="sites-map.css?v=3">
 </head>
-<body class="dark-mode">
+<body class="dark-mode map-page">
 
     <!-- =============================
          Top Navigation
@@ -39,9 +40,9 @@
                         title="View Site List">
                     <i class="bi bi-list"></i>
                 </button>
-                <div class="navbar-brand">
-                    <img src="/images/AeonRegistryLogo.png" alt="Logo" class="nav-logo me-2">
-                </div>
+                <a href="/" class="navbar-brand">
+                    <img src="/images/AeonRegistryLogoBLK.png" alt="Logo" class="nav-logo me-2">
+                </a>
             </div>           
         </div>
     </nav>
@@ -49,7 +50,7 @@
     <!-- =============================
          Layout (Desktop)
          ============================= -->
-    <div class="container-fluid h-100">
+    <div class="container-fluid map-layout">
         <div class="row h-100">
             <!-- Sidebar (Desktop only) -->
             <div class="col-md-2 p-0 d-none d-md-block sidebar">
@@ -124,6 +125,27 @@
             </div>
         </div>
     </template>
+
+    <footer class="site-footer">
+        <div class="footer-bar">
+            <div class="footer-meta">
+                <div class="built-by">
+                    <span>Built By</span>
+                    <img src="/images/arunpun-home-logo.png" alt="AP" width="30" height="30">
+                </div>
+                <div class="footer-copy">&copy; 2026 Arun Pun. All rights reserved.</div>
+            </div>
+            <img class="footer-wordmark" src="/images/arunpun-logo.png" alt="Arun Pun" width="216" height="36">
+            <div class="footer-social">
+                <a href="https://github.com/justarunsthing" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                    <i class="bi bi-github" aria-hidden="true"></i>
+                </a>
+                <a href="https://instagram.com/justarunsthing" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                    <i class="bi bi-instagram" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
 
     <!-- =============================
          Scripts

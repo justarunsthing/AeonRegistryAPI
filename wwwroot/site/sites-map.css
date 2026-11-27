@@ -23,10 +23,40 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden;
     background-color: var(--aeon-bg);
     color: var(--aeon-light);
     font-family: "source-code-pro", monospace;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+html:has(.map-page),
+body.map-page {
+    overflow: hidden;
+}
+
+html:has(.page-home) {
+    height: auto;
+    min-height: 100%;
+    overflow: auto;
+}
+
+body.page-home,
+body.map-page {
+    box-sizing: border-box;
+    padding-bottom: 72px;
+}
+
+body.page-home {
+    height: auto;
+    min-height: 100dvh;
+}
+
+body.page-home .page-main {
+    flex: 1 0 auto;
 }
 
 
@@ -83,6 +113,124 @@ html, body {
         box-shadow: 0 0 10px rgba(0, 224, 255, 0.45);
     }
 
+/* --- Footer --- */
+.site-footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1100;
+    height: 72px;
+    box-sizing: border-box;
+    padding: 0 1.25rem;
+    background-color: #000;
+    color: #fff;
+    overflow: hidden;
+}
+
+.footer-bar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    column-gap: 0.75rem;
+}
+
+.site-footer .footer-meta {
+    min-width: 0;
+    justify-self: start;
+}
+
+.site-footer .built-by {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.95rem;
+    line-height: 1.1;
+    white-space: nowrap;
+}
+
+.site-footer .built-by img {
+    display: block;
+    height: 28px;
+    width: 28px;
+    max-width: none;
+    object-fit: contain;
+    flex: 0 0 auto;
+}
+
+.site-footer .footer-copy {
+    margin-top: 0.1rem;
+    font-size: 0.75rem;
+    line-height: 1.2;
+    color: #d6d6d6;
+    white-space: nowrap;
+}
+
+.site-footer .footer-wordmark {
+    display: block;
+    justify-self: center;
+    height: 34px;
+    width: auto;
+    max-width: min(220px, 34vw);
+    max-height: 34px;
+    min-width: 0;
+    object-fit: contain;
+}
+
+.site-footer .footer-social {
+    display: flex;
+    align-items: center;
+    justify-self: end;
+    min-width: 0;
+}
+
+.site-footer .footer-social a {
+    color: #fff;
+    font-size: 1.35rem;
+    line-height: 1;
+    text-decoration: none;
+}
+
+.site-footer .footer-social a + a {
+    margin-left: 0.85rem;
+}
+
+.site-footer .footer-social a:hover {
+    color: var(--aeon-cyan);
+}
+
+@media (max-width: 640px) {
+    .site-footer {
+        padding: 0 0.75rem;
+    }
+
+    .site-footer .built-by {
+        font-size: 0.75rem;
+    }
+
+    .site-footer .built-by img {
+        height: 20px;
+        width: 20px;
+    }
+
+    .site-footer .footer-copy {
+        font-size: 0.62rem;
+        white-space: normal;
+    }
+
+    .site-footer .footer-wordmark {
+        height: 24px;
+        max-height: 24px;
+        max-width: min(140px, 36vw);
+    }
+
+    .site-footer .footer-social a {
+        font-size: 1.15rem;
+    }
+}
+
 
 /* --- Buttons & Links --- */
 .btn-outline-info {
@@ -109,13 +257,26 @@ html, body {
 /* ===== 4. PAGE LAYOUTS ===== */
 
 /* --- Map Page --- */
+.map-layout {
+    flex: 1 1 auto;
+    min-height: 0;
+    margin-top: 64px;
+    display: flex;
+    flex-direction: column;
+}
+
+.map-layout > .row {
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
 #map {
-    height: calc(100dvh - 56px);
+    height: 100%;
     width: 100%;
     background-color: #0a0a0a;
     filter: brightness(0.9) contrast(1.05);
-    margin-top: 56px;
 }
+
 
 .sidebar {
     background-color: #121212;
@@ -123,7 +284,7 @@ html, body {
     border-right: 1px solid var(--aeon-border);
     overflow-y: auto;
     font-size: 0.92rem;
-    margin-top: 56px;
+    height: 100%;
 }
 
 .sidebar-title {

@@ -29,7 +29,8 @@ const darkOverlay = L.tileLayer(
 );
 
 // Night-ops aesthetic
-L.layerGroup([worldImagery, darkOverlay]).addTo(map);
+// L.layerGroup([worldImagery, darkOverlay]).addTo(map);
+worldImagery.addTo(map);
 
 // ---------------------
 //  Global State
